@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation AAP FSE+ - Mission Locale Pays Basque</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #17a2b8, #fd7e14);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: #17a2b8;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card.active {
+            border-color: #17a2b8;
+            background: linear-gradient(135deg, #f8fdff 0%, #e6f9ff 100%);
+        }
+
+        .card.active::before {
+            transform: scaleX(1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .contexte .card-icon { background: linear-gradient(135deg, #17a2b8, #138496); }
+        .mobilite-int .card-icon { background: linear-gradient(135deg, #fd7e14, #e55a00); }
+        .mobilite-trans .card-icon { background: linear-gradient(135deg, #17a2b8, #fd7e14); }
+        .mobilite-terr .card-icon { background: linear-gradient(135deg, #6c757d, #495057); }
+        .numerique .card-icon { background: linear-gradient(135deg, #fd7e14, #17a2b8); }
+
+        .card-title {
+            color: #2c3e50;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .card-content {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .card.active .card-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-section {
+            margin-bottom: 20px;
+        }
+
+        .content-section h4 {
+            color: #17a2b8;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-section h4::before {
+            content: '▶';
+            color: #fd7e14;
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+
+        .content-section p, .content-section ul {
+            color: #495057;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .content-section ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .content-section li {
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #fd7e14;
+            margin: 15px 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #17a2b8;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .click-hint {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: 30px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AAP FSE+ Nouvelle-Aquitaine</h1>
+            <p>Mission Locale Pays Basque • 2025-2027</p>
+        </div>
+
+        <div class="cards-grid">
+            <!-- Bloc Contexte -->
+            <div class="card contexte" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">📋</div>
+                    <div class="card-title">Contexte<br>AAP FSE+ Nouvelle-Aquitaine</div>
+                </div>
+                <div class="card-content">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">15,7M€</span>
+                            <span class="stat-label">Enveloppe</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">16-29</span>
+                            <span class="stat-label">ans</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">30k€</span>
+                            <span class="stat-label">Min.</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">40%</span>
+                            <span class="stat-label">Cofinancement</span>
+                        </div>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h4>Cahier des charges</h4>
+                        <ul>
+                            <li>Période : 2025–2027 (avenant possible 2028)</li>
+                            <li>Montant minimum : 30k€ (50k€ consortium)</li>
+                            <li>Cofinancement : 40% minimum</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Actions attendues</h4>
+                        <p>Insertion, alternance, mobilité, numérique, citoyenneté, employeurs</p>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>Points de vigilance</h4>
+                        <ul>
+                            <li>Complémentarité avec CEJ / droit commun</li>
+                            <li>Impact mesurable</li>
+                            <li>Cohérence territoriale (éviter doublons)</li>
+                            <li>Gestion administrative FSE+ (traçabilité, justificatifs)</li>
+                            <li>Pérennité des postes cofinancés</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloc 1 - Mobilité internationale -->
+            <div class="card mobilite-int" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">🌍</div>
+                    <div class="card-title">Mobilité internationale<br><small style="font-weight: 400; color: #6c757d;">0,25 ETP – Take Off Pro</small></div>
+                </div>
+                <div class="card-content">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">40</span>
+                            <span class="stat-label">Jeunes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0,25</span>
+                            <span class="stat-label">ETP</span>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Objectifs</h4>
+                        <p>Accompagner 40 jeunes vers Erasmus+/CES avec Pistes Solidaires</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Pertinence AAP</h4>
+                        <p>Levée de freins périphériques, mobilité européenne</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Ressources internes</h4>
+                        <p>0,25 ETP conseiller mobilité + équipe projet</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Partenaires potentiels</h4>
+                        <p>Pistes Solidaires, CFA, Erasmus+, collectivités</p>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>Caractère innovant</h4>
+                        <p>Mobilité internationale intégrée dans parcours CEJ/FSE+</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Apport insertion</h4>
+                        <p>Compétences linguistiques, soft skills, CV enrichi</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Cofinancement</h4>
+                        <p>Erasmus+, Région, Pistes Solidaires</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloc 2 - Mobilité transfrontalière -->
+            <div class="card mobilite-trans" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-title">Mobilité transfrontalière<br><small style="font-weight: 400; color: #6c757d;">0,25 ETP – Zigor</small></div>
+                </div>
+                <div class="card-content">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">15</span>
+                            <span class="stat-label">Jeunes/an</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0,25</span>
+                            <span class="stat-label">ETP</span>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Objectifs</h4>
+                        <p>15 jeunes/an → rallye entreprises, ateliers emploi FR/ES, immersions pro Espagne</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Pertinence AAP</h4>
+                        <p>Mobilisation employeurs, accompagnement insertion</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Ressources internes</h4>
+                        <p>Zigor – référent transfrontalier (0,25 ETP)</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Partenaires potentiels</h4>
+                        <p>Lanbide, Bidasoa Activa, Eurorégion</p>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>Caractère innovant</h4>
+                        <p>Centre ressources mobile transfrontalier</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Apport insertion</h4>
+                        <p>Accès au marché binational, levée des barrières juridiques</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Cofinancement</h4>
+                        <p>POCTEFA Lanean, Eurorégion</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloc 3 - Mobilité territoriale -->
+            <div class="card mobilite-terr" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">🚗</div>
+                    <div class="card-title">Mobilité territoriale<br><small style="font-weight: 400; color: #6c757d;">0,5 ETP JPT + poste parrainage</small></div>
+                </div>
+                <div class="card-content">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">120</span>
+                            <span class="stat-label">Jeunes/an</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0,5</span>
+                            <span class="stat-label">ETP JPT</span>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Objectifs</h4>
+                        <p>120 jeunes/an → ateliers mécaniques, auto-écoles sociales (CIEL), covoiturage solidaire, conduite supervisée</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Pertinence AAP</h4>
+                        <p>Levée de freins périphériques, remobilisation</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Ressources internes</h4>
+                        <p>JPT (0,5 ETP) + poste parrainage mobilité</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Partenaires potentiels</h4>
+                        <p>Syndicat Txik Txak, CIEL, collectivités locales</p>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>Caractère innovant</h4>
+                        <p>Parrainage mobilité entre pairs</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Apport insertion</h4>
+                        <p>Autonomie transport, accès formation/emploi rural</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Cofinancement</h4>
+                        <p>Syndicat mobilités, collectivités</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloc 4 - Numérique -->
+            <div class="card numerique" onclick="toggleCard(this)">
+                <div class="card-header">
+                    <div class="card-icon">💻</div>
+                    <div class="card-title">Numérique<br><small style="font-weight: 400; color: #6c757d;">0,25 ETP – Fibre 64</small></div>
+                </div>
+                <div class="card-content">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">300</span>
+                            <span class="stat-label">Jeunes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0,25</span>
+                            <span class="stat-label">ETP</span>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Objectifs</h4>
+                        <p>300 jeunes → ateliers numériques, ePortfolio, CV vidéo</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Pertinence AAP</h4>
+                        <p>Remise à niveau compétences, appui alternance</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Ressources internes</h4>
+                        <p>0,25 ETP conseiller numérique</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Partenaires potentiels</h4>
+                        <p>Fibre 64, France Travail, associations locales</p>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>Caractère innovant</h4>
+                        <p>Badges numériques, certification soft skills</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Apport insertion</h4>
+                        <p>Employabilité accrue, autonomie digitale</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>Cofinancement</h4>
+                        <p>Fibre 64</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="click-hint">
+            💡 Cliquez sur chaque bloc pour découvrir les détails des actions
+        </div>
+    </div>
+
+    <script>
+        function toggleCard(card) {
+            // Fermer toutes les autres cartes
+            const allCards = document.querySelectorAll('.card');
+            allCards.forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('active');
+                }
+            });
+            
+            // Basculer la carte cliquée
+            card.classList.toggle('active');
+            
+            // Scroll vers la carte si elle s'ouvre
+            if (card.classList.contains('active')) {
+                setTimeout(() => {
+                    card.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 100);
+            }
+        }
+
+        // Fermer les cartes en cliquant en dehors
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.card')) {
+                const allCards = document.querySelectorAll('.card');
+                allCards.forEach(card => {
+                    card.classList.remove('active');
+                });
+            }
+        });
+
+        // Animation d'entrée des cartes
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 100);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980e2307948a9ea9',t:'MTc1ODE3MDEyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
